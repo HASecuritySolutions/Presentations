@@ -1,4 +1,6 @@
-[1:2000419:18] ET POLICY PE EXE or DLL Windows file download [Classification: Potential Corporate Privacy Violation] [Priority: 1]: <so-eth1-1> {TCP} 173.194.162.104:80 -> 192.168.2.39:49274
+EXE Download Alert
+[1:2000419:18] ET POLICY PE EXE or DLL Windows file download [Classification: Potential Corporate Privacy Violation] [Priority: 1]: <sodev-eth1-1> {TCP} 74.125.159.56:80 -> 192.168.2.39:49339
 
-[1:2010881:5] ET WEB_CLIENT PDF With Unescape Method Defined Possible Hostile Obfuscation Attempt [Classification: Potentially Bad Traffic] [Priority: 2]: <so-eth1-1> {TCP} 34.238.50.98:80 -> 192.168.2.39:49532
 
+PDF alert
+[1:2017899:3] ET CURRENT_EVENTS Possible PDF Dictionary Entry with Hex/Ascii replacement [Classification: A Network Trojan was detected] [Priority: 1]: <sodev-eth1-1> {TCP} 54.161.95.242:80 -> 192.168.2.39:49247
