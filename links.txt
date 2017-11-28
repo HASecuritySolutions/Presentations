@@ -1,0 +1,5 @@
+ELKHunter (VM with Security Onion and Elastic Stack on one VM - used to analysis mass pcaps with Bro, Suricata, and Logstash)
+https://drive.google.com/file/d/0B8mYc46vShpWZV9XcHBFUTl0QXc/view?usp=sharing
+
+User: hunter
+Pass: hunter
