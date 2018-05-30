@@ -23,3 +23,6 @@ http://localhost:5601
 http://localhost:9000
 
 When in Cerebro connect to http://elasticsearch:9200 instead of http://localhost:9200
+
+### Sending test alerts into Logstash for ingestion
+
