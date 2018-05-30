@@ -49,7 +49,7 @@ echo "event_id=1102 message=TestMessage" | nc 127.0.0.1 6000 -q1
 This docker implementation has a Logstash container running in the background that is listening for **key-value** data on port **6000** or **json** data on port **60000**. Below is an example of sending a mock Windows log clear event (which is event_id 1102). 
 
 ```bash
-echo '{ "index":"logstash-test","event_id":1102,"message":"TestMessage" }' | nc 127.0.0.1 6000 -q1
+echo '{ "index":"logstash-test","event_id":1102,"message":"TestMessage" }' | nc 127.0.0.1 60000 -q1
 ```
 
 **NOTE**: You must include an index name when using the **json** method.
