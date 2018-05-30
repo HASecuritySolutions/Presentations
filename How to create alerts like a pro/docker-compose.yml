@@ -78,6 +78,7 @@ services:
     mem_limit: 4g
     ports:
       - 6000:6000
+      - 60000:60000
     volumes:
       - ./logstash/manual.conf:/usr/share/logstash/pipeline/manual.conf:ro
       - ./logstash/manual_json.conf:/usr/share/logstash/pipeline/manual_json.conf:ro
