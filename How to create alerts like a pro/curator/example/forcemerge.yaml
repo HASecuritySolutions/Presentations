@@ -1,0 +1,20 @@
+actions:
+  1:
+    action: forcemerge
+    description: "Perform a forceMerge on selected indices to 'max_num_segments' per shard"
+    options:
+      max_num_segments: 1
+      delay:
+      timeout_override: 21600 
+      continue_if_exception: false
+      disable_action: false
+    filters:
+    - filtertype: pattern
+      kind: prefix
+      value: logstash-
+    - filtertype: age
+      source: name
+      direction: older
+      timestring: '%Y.%m.%d'
+      unit: days
+      unit_count: 3

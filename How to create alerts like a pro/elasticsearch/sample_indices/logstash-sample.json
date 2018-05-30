@@ -1,0 +1,2 @@
+{ "index":"logstash-sample","event_id":7045,"event_data.ServiceName":"Test" }
+{ "index":"logstash-sample","highest_registered_domain":"google.com" }

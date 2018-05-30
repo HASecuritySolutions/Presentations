@@ -1,0 +1,20 @@
+name: DNS Newly Registered Domain Request
+type: frequency
+index: logstash-*
+
+realert:
+  minutes: 0
+
+num_events: 1
+timeframe:
+  hours: 1
+
+filter:
+- query:
+    query_string:
+        query: "event_type:dns AND creation_date:[now-30d TO now] -tags:top-1m"
+
+alert: debug
+#email: justin@hasecuritysolutions.com
+#from_addr: "elastalert@hasecuritysolutions.com"
+#smtp_host: email_gateway_goes_here

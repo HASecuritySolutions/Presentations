@@ -1,0 +1,21 @@
+name: High Number of Connections
+type: frequency
+index: logstash-*
+
+realert:
+  minutes: 5
+
+num_events: 100
+timeframe:
+  hours: 1
+query_key: source_ip
+
+filter:
+- query:
+    query_string:
+        query: "event_type:flow AND (((state:new OR state:established) AND _exists_:tcp.ack) OR (state:closed AND tcp.fin:true))"
+
+alert: debug
+#email: justin@hasecuritysolutions.com
+#from_addr: "elastalert@hasecuritysolutions.com"
+#smtp_host: email_gateway_goes_here

@@ -1,0 +1,20 @@
+name: Brute Force Logins
+type: frequency
+index: logstash-*
+
+realert:
+  minutes: 5
+
+num_events: 50
+timeframe:
+  hours: 1
+query_key: event_data.TargetUserName
+
+filter:
+- term:
+    event_id: 4625
+
+alert: debug
+#email: justin@hasecuritysolutions.com
+#from_addr: "elastalert@hasecuritysolutions.com"
+#smtp_host: email_gateway_goes_here

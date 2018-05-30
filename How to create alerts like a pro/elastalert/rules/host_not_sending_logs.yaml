@@ -1,0 +1,23 @@
+name: Host Not Sending Logs
+type: flatline
+index: logstash-*
+
+realert:
+  minutes: 60
+
+threshold: 1
+timeframe:
+  minutes: 1
+
+use_count_query: true
+doc_type: doc
+
+filter:
+- query:
+    query_string:
+       query: 'source_ip:192.168.2.101'
+
+alert: debug
+#email: justin@hasecuritysolutions.com
+#from_addr: "elastalert@hasecuritysolutions.com"
+#smtp_host: email_gateway_goes_here

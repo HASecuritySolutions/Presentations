@@ -1,0 +1,105 @@
+version: '2.2'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
+    container_name: elasticsearch
+    restart: always
+    environment:
+      - cluster.name=labmeinc
+      - node.name=elasticsearch
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 4g
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+  kibana:
+    image: hasecuritysolutions/kibanaoss:v6.2.4
+    container_name: kibana
+    restart: always
+    depends_on:
+      - elasticsearch
+    environment:
+      - SERVER_NAME=kibana
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    networks:
+      - esnet
+  elastic_cron:
+    image: hasecuritysolutions/elastic_cron
+    container_name: elastic_cron
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+      - LOGSTASH_HOST=logstash 
+      - LOGSTASH_JSON_PORT=60000
+      - TZ=America/Chicago
+      - ELASTICSEARCH_INDEX_TEMPLATES=/opt/elastic_stack/elasticsearch/index_templates
+      - SAMPLE_INDEX_FOLDER=/opt/elastic_stack/elasticsearch/sample_indices
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./elasticsearch/index_templates:/opt/elastic_stack/elasticsearch/index_templates
+      - ./elasticsearch/sample_indices:/opt/elastic_stack/elasticsearch/sample_indices
+      - ./cron/custom-cron:/etc/cron.d/custom-cron
+      - ./cron/logs:/home/elastic-cron/logs
+      - ./cron/scripts:/scripts
+      - ./curator:/etc/curator:ro
+    networks:
+      - esnet
+  cerebro:
+    image: dylanmei/cerebro
+    container_name: cerebro
+    depends_on:
+      - elasticsearch
+    ports:
+      - 9000:9000
+    networks:
+      - esnet
+  logstash:
+    image: hasecuritysolutions/logstashoss:v6.2.4
+    container_name: logstash
+    restart: always
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
+      - pipeline.batch.size=125
+      - config.reload.automatic=true
+      - config.reload.interval=30s
+      - queue.type=persisted
+      - "LS_JAVA_OPTS:-Xmx1g -Xms384m"
+    mem_limit: 4g
+    ports:
+      - 6000:6000
+    volumes:
+      - ./logstash/manual.conf:/usr/share/logstash/pipeline/manual.conf:ro
+      - ./logstash/manual_json.conf:/usr/share/logstash/pipeline/manual_json.conf:ro
+    networks:
+      - esnet
+  elastalert:
+    entrypoint: /bin/bash /opt/entrypoint.sh
+    image: hasecuritysolutions/elastalert:latest
+    container_name: elastalert
+    restart: always
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+      - ELASTALERT_INDEX_REPLICAS=0
+    depends_on:
+      - elasticsearch
+      - elastic_cron
+    volumes:
+      - ./elastalert:/etc/elastalert:ro
+    networks:
+      - esnet
+
+networks:
+  esnet:
+    driver: bridge
