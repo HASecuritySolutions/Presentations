@@ -41,7 +41,7 @@ Tab completion is your friend. Please do not complain about the folder path. Thi
 This docker implementation has a Logstash container running in the background that is listening for **key-value** data on port **6000** or **json** data on port **60000**. Below is an example of sending a mock Windows log clear event (which is event_id 1102).
 
 ```bash
-echo "event_id=1102 message=TestMessage" | nc 127.0.0.1 6000
+echo "event_id=1102 message=TestMessage" | nc 127.0.0.1 6000 -q1
 ```
 
 ### Option 3 - Use netcat to craft a **json** log
@@ -49,7 +49,7 @@ echo "event_id=1102 message=TestMessage" | nc 127.0.0.1 6000
 This docker implementation has a Logstash container running in the background that is listening for **key-value** data on port **6000** or **json** data on port **60000**. Below is an example of sending a mock Windows log clear event (which is event_id 1102). 
 
 ```bash
-echo '{ "index":"logstash-test","event_id":1102,"message":"TestMessage" }' | nc 127.0.0.1 6000
+echo '{ "index":"logstash-test","event_id":1102,"message":"TestMessage" }' | nc 127.0.0.1 6000 -q1
 ```
 
 **NOTE**: You must include an index name when using the **json** method.
