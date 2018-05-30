@@ -8,6 +8,8 @@ sudo apt-get install -y git
 sudo git clone https://github.com/HASecuritySolutions/Presentations.git
 cd Presentations/How\ to\ create\ alerts\ like\ a\ pro/
 sudo bash prereq.sh
-docker-compose up --no-start
-docker-compose start
+
+# sudo is only required until your next login or reboot
+sudo docker-compose up --no-start
+sudo docker-compose start
 ```
