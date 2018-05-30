@@ -6,8 +6,8 @@ This presentation comes with a **Docker** implementation to mimic what was demon
 cd /opt
 sudo apt-get install -y git
 sudo git clone https://github.com/HASecuritySolutions/Presentations.git
-sudo bash /opt/Presentations//prereq.sh
-cd /opt/Presentations/How\ to\ create\ alerts\ like\ a\ pro
+cd Presentations/How\ to\ create\ alerts\ like\ a\ pro/
+sudo bash prereq.sh
 docker-compose up --no-start
 docker-compose start
 ```
