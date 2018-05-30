@@ -24,5 +24,32 @@ http://localhost:9000
 
 When in Cerebro connect to http://elasticsearch:9200 instead of http://localhost:9200
 
-### Sending test alerts into Logstash for ingestion
+## Sending test alerts into Logstash for ingestion
 
+### Option 1 - Use Logstash
+
+Logstash can be invoked as an alias was created with the commands at the top of this guide. The only catch is an absolute path must be given. For example, to run the windows_log_cleared.conf (which created a mock event_id 1102 log), issue this command:
+
+```bash
+logstash -f /opt/Presentations/How\ to\ create\ alerts\ like\ a\ pro/logstash/windows_log_cleared.conf
+```
+
+Tab completion is your friend. Please do not complain about the folder path. This is a demo folks. I have a more complete and extensive project in the works. Stay tuned...
+
+### Option 2 - Use netcat to craft a **key-value** log
+
+This docker implementation has a Logstash container running in the background that is listening for **key-value** data on port **6000** or **json** data on port **60000**. Below is an example of sending a mock Windows log clear event (which is event_id 1102).
+
+```bash
+echo "event_id=1102 message=TestMessage" | nc 127.0.0.1 6000
+```
+
+### Option 3 - Use netcat to craft a **json** log
+
+This docker implementation has a Logstash container running in the background that is listening for **key-value** data on port **6000** or **json** data on port **60000**. Below is an example of sending a mock Windows log clear event (which is event_id 1102). 
+
+```bash
+echo '{ "index":"logstash-test","event_id":1102,"message":"TestMessage" }' | nc 127.0.0.1 6000
+```
+
+**NOTE**: You must include an index name when using the **json** method.
