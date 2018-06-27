@@ -1,0 +1,3 @@
+192.168.2.101,"hostname=dc01 purpose=domain_controller owner=justin"
+192.168.2.203,"hostname=vuln purpose=VulnerabilityScanner owner=kevin"
+192.168.2.39,"hostname=it01 purpose=AdministrativeWorkstation owner=kevin sensitive=DomainAdminUsedHere"
