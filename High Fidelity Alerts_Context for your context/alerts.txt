@@ -1,0 +1,3 @@
+[1:2000419:18] ET POLICY PE EXE or DLL Windows file download [Classification: Potential Corporate Privacy Violation] [Priority: 1]: <sodev-eth1-1> {TCP} 198.105.254.114:80 -> 192.168.2.39:49339
+
+[1:2017919:2] 	ET DOS Possible NTP DDoS Inbound Frequent Un-Authed MON_LIST Requests IMPL 0x03 [Classification: Attempted Denial of Service] [Priority: 2]: <sodev-eth1-1> {TCP} 192.168.2.203:56302 -> 192.168.2.101:123
