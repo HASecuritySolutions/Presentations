@@ -1,5 +1,4 @@
-﻿#$rules = get-content -Path C:\Users\jhenderson\Downloads\rules\*.rules | Where-Object { $_ -notmatch "^#" }
-$output = "{"
+﻿$rules = get-content -Path C:\Users\jhenderson\Downloads\rules\*.rules | Where-Object { $_ -notmatch "^#" }
 
 foreach($rule in $rules){
     if($sid = [regex]::match($rule, "sid:(?<sid>[0-9]+);").Groups[1].Value){
