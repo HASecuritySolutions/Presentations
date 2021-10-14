@@ -1,0 +1,79 @@
+==== Access Container Memory ====
+MAIN TERMINAL
+docker run -it --rm --name test_container1 centos /bin/bash
+
+SECRET=SuperSecretPassword1234
+echo $SECRET
+
+SECONDARY TERMINAL
+docker inspect test_container1 | grep Pid
+
+cd /tmp
+sudo procdump -p 
+
+strings bash_time | grep SECRET
+
+==== Nginx default ====
+MAIN TERMINAL
+docker run -it --rm --name nginx -p 8000:80 nginx
+
+SECONDARY TERMINAL
+docker exec -it nginx bash
+cd /var/log/nginx
+ls
+cat access.log
+tail -f access.log
+ls -l
+
+==== Nginx Bind Mount ====
+MAIN TERMINAL
+docker run -it --rm --name nginx -p 8000:80 -v /tmp/nginx_logs:/var/log/nginx nginx
+
+SECONDARY TERMINAL
+ls -l
+tail -f access.log
+
+==== Nginx Volume Mount ====
+MAIN TERMINAL
+docker volume create nginx_logs
+docker run -it --rm --name nginx -p 8000:80 -v nginx_logs:/var/log/nginx nginx
+
+SECONDARY TERMINAL
+ls -l /var/log/nginx # What the?
+
+MAIN TERMINAL
+docker run -it --rm --name nginx -p 8000:80 -v nginx_logs:/var/log/nginx -v /labs/nginx.conf:/etc/nginx/nginx.conf nginx
+# Difference is output is to /var/log/nginx_logs instead of /var/log/nginx
+
+SECONDARY TERMINAL
+ls -l /var/log/nginx_logs
+# Close out of docker exec
+
+docker run -it --rm -v nginx_logs:/logs:ro centos bash
+tail /logs/access.log
+# close out of container
+
+#show syslog-ng.conf
+cat /labs/syslog-ngs.conf
+# start nc listener
+nc -lkv 172.17.0.1 5514 -nn
+
+TERTIARY TERMINAL
+docker run -it --rm -v /labs/syslog-ng.conf:/etc/syslog-ng/syslog-ng.conf -v nginx_logs:/logs balabit/syslog-ng
+# May take a second on new log updates. Sends in batches
+
+==== Nginx Customize Application ====
+MAIN TERMINAL
+# difference here is nginx.conf is changed and sends logs to syslog TCP 5514
+docker run -it --rm --name nginx -p 8000:80 -v /labs/nginx_syslog.conf:/etc/nginx/nginx.conf nginx
+
+SECONDARY TERMINAL
+nc -ulkv 172.17.0.1 5514 -nn
+
+==== Docker  ====
+MAIN TERMINAL
+code /labs/docker/filebeat-docker.yml
+docker run -it --rm -v /labs/filebeat-docker.yml:/usr/share/filebeat/filebeat.yml:ro -v /var/lib/docker/containers:/var/lib/docker/containers:ro -v /var/run/docker.sock:/var/run/docker.sock:ro -e -strict.perms=false docker.elastic.co/beats/filebeat:7.15.0
+
+SECONDARY TERMINAL
+docker run -it --rm --name nginx -p 8000:80 nginx
