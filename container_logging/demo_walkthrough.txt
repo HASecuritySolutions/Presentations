@@ -1,18 +1,3 @@
-==== Access Container Memory ====
-MAIN TERMINAL
-docker run -it --rm --name test_container1 centos /bin/bash
-
-SECRET=SuperSecretPassword1234
-echo $SECRET
-
-SECONDARY TERMINAL
-docker inspect test_container1 | grep Pid
-
-cd /tmp
-sudo procdump -p 
-
-strings bash_time | grep SECRET
-
 ==== Nginx default ====
 MAIN TERMINAL
 docker run -it --rm --name nginx -p 8000:80 nginx
@@ -73,7 +58,45 @@ nc -ulkv 172.17.0.1 5514 -nn
 ==== Docker  ====
 MAIN TERMINAL
 code /labs/docker/filebeat-docker.yml
-docker run -it --rm -v /labs/filebeat-docker.yml:/usr/share/filebeat/filebeat.yml:ro -v /var/lib/docker/containers:/var/lib/docker/containers:ro -v /var/run/docker.sock:/var/run/docker.sock:ro -e -strict.perms=false docker.elastic.co/beats/filebeat:7.15.0
+docker run -it -u root --rm -v /labs/filebeat-docker.yml:/usr/share/filebeat/filebeat.yml:ro -v /var/lib/docker/containers:/var/lib/docker/containers:ro -v /var/run/docker.sock:/var/run/docker.sock:ro docker.elastic.co/beats/filebeat:7.15.0
 
 SECONDARY TERMINAL
 docker run -it --rm --name nginx -p 8000:80 nginx
+
+TERTIARY TERMINAL
+sudo su
+find /var/lib/docker/containers | grep .json
+#tail one of the logs
+
+==== Access Container Memory ====
+MAIN TERMINAL
+docker run -it --rm --name test_container1 centos /bin/bash
+
+SECRET=SuperSecretPassword1234
+echo $SECRET
+
+SECONDARY TERMINAL
+docker inspect test_container1 | grep Pid
+
+cd /tmp
+sudo procdump -p 
+
+strings bash_time | grep SECRET
+
+==== OTHER FUN THINGS ====
+MAIN TERMINAL
+docker run -it --rm --name nginx -p 8000:80 nginx
+
+SECONDARY TERMINAL
+docker diff nginx
+docker commit nginx investigation_image
+docker image inspect investigation_image
+
+# Dive Tool
+https://github.com/wagoodman/dive
+dive investigation_image
+
+# Alternative
+docker run -it --rm investigation_image bash
+docker run -it --rm investigation_image bash
+docker run -it --rm --entrypoint bash investigation_image
