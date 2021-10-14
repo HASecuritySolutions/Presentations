@@ -1,3 +1,6 @@
+Assumes docker is installed
+Extras at the end use Microsoft Procmon and Dive
+
 ==== Nginx default ====
 MAIN TERMINAL
 docker run -it --rm --name nginx -p 8000:80 nginx
