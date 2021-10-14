@@ -27,8 +27,11 @@ docker volume create nginx_logs
 docker run -it --rm --name nginx -p 8000:80 -v nginx_logs:/var/log/nginx nginx
 
 SECONDARY TERMINAL
+docker exec -it nginx bash
 ls -l /var/log/nginx # What the?
+rm -rf /var/log/nginx/*
 
+# Stop nginx and re-run in the main terminal
 MAIN TERMINAL
 docker run -it --rm --name nginx -p 8000:80 -v nginx_logs:/var/log/nginx -v /labs/nginx.conf:/etc/nginx/nginx.conf nginx
 # Difference is output is to /var/log/nginx_logs instead of /var/log/nginx
